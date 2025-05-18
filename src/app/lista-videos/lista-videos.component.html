@@ -1,0 +1,5 @@
+<h2>Lista de videos de YouTube</h2>
+
+@for(item of video?.items; track item) {
+    <div [innerHTML]="obtenerVideo(item)"></div>
+}
