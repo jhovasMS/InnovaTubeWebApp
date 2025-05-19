@@ -1,0 +1,45 @@
+<div class="text-center">
+  <h2>Lista de videos</h2>
+  <!--de YouTube-->
+
+<form>
+  <div class="col">
+    <div class="row justify-content-center">
+      <label for="palabraClave" class="form-label">Palabra</label>
+      <input type="text" id="palabraClave" name="palabraClave" class="form-control">
+    </div>
+  </div>
+</form>
+</div>
+<div class="row justify-content-center">
+  @for(item of video?.items; track item) {
+  <div class="card bg-light mb-3" style="width: 50%">
+    <div class="text-center mt-2" [innerHTML]="obtenerVideo(item)"></div>
+    <div class="card-body">
+      <h5 class="card-title">{{ item.snippet.title }}</h5>
+      <p class="card-text">
+        {{ item.snippet.description }}
+      </p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">{{ item.snippet.channelTitle }}</li>
+      <li class="list-group-item">{{ item.statistics.viewCount | number }}</li>
+      <!--<li class="list-group-item">A third item</li>-->
+    </ul>
+  </div>
+  <hr />
+  }
+  <nav aria-label="...">
+    <ul class="pagination pagination-lg justify-content-center">
+      <li class="page-item" [ngClass]="{'disabled': btnPaginaAnterior === false}"><!--disabled-->
+        <a class="page-link" href="#" (click)="obtenerVideoAnterior()">Previous</a><!--tabindex="-1" aria-disabled="true"-->
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">{{ numPagina }}</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': btnPaginaSiguiente == false}">
+        <a class="page-link" href="#" (click)="obtenerVideoSiguiente()">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>

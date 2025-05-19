@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ListaVideosComponent } from "./lista-videos/lista-videos.component";
+import { ListaVideosComponent } from './component/lista-videos/lista-videos.component';
 
 @Component({
   selector: 'app-root',
