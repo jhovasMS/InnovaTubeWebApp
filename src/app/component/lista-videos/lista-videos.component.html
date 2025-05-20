@@ -1,22 +1,28 @@
-<div class="text-center">
-  <h2>Lista de videos</h2>
+<div class="text-center text-primary">
+  <h2>Videos</h2>
   <!--de YouTube-->
-
-<form>
-  <div class="col">
-    <div class="row justify-content-center">
-      <label for="palabraClave" class="form-label">Palabra</label>
-      <input type="text" id="palabraClave" name="palabraClave" class="form-control">
-    </div>
-  </div>
-</form>
 </div>
+<nav class="navbar bg-body-tertiary mb-3">
+  <div class="container-fluid justify-content-center">
+    <form method="post" class="d-flex" role="search" #f="ngForm" (ngSubmit)="f.form.valid && buscarVideos()">
+      <input type="search" name="palabraClaveTemp" class="form-control me-2"
+        required [(ngModel)]="palabraClaveTemp" #palabraClave="ngModel"/>
+      @if (palabraClave.invalid && palabraClave.touched) {
+        <div class="text-danger">
+            Se necesita ingresar un texto. 
+        </div>
+      }
+      <button type="submit" class="btn btn-outline-primary">Buscar</button>
+    </form>
+  </div>
+</nav>
 <div class="row justify-content-center">
-  @for(item of video?.items; track item) {
+  @for(item of video?.items; track item.id) {
   <div class="card bg-light mb-3" style="width: 50%">
     <div class="text-center mt-2" [innerHTML]="obtenerVideo(item)"></div>
     <div class="card-body">
-      <h5 class="card-title">{{ item.snippet.title }}</h5>
+      <h5 class="card-title">{{ item.snippet.title }}</h5> 
+      <button class="btn btn-primary" (click)="agregarEnFavoritos(item)">Agregar a Favoritos</button>
       <p class="card-text">
         {{ item.snippet.description }}
       </p>
@@ -32,13 +38,13 @@
   <nav aria-label="...">
     <ul class="pagination pagination-lg justify-content-center">
       <li class="page-item" [ngClass]="{'disabled': btnPaginaAnterior === false}"><!--disabled-->
-        <a class="page-link" href="#" (click)="obtenerVideoAnterior()">Previous</a><!--tabindex="-1" aria-disabled="true"-->
+        <a class="page-link" href="#" (click)="obtenerVideosAnteriores()">Anterior</a><!--tabindex="-1" aria-disabled="true"-->
       </li>
       <li class="page-item">
         <a class="page-link" href="#">{{ numPagina }}</a>
       </li>
       <li class="page-item" [ngClass]="{'disabled': btnPaginaSiguiente == false}">
-        <a class="page-link" href="#" (click)="obtenerVideoSiguiente()">Next</a>
+        <a class="page-link" href="#" (click)="obtenerVideosSiguientes()">Siguiente</a>
       </li>
     </ul>
   </nav>

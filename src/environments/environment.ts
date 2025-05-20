@@ -1,4 +1,5 @@
 export const environment = {
     youtubeAPI: 'https://youtube.googleapis.com/youtube/v3',
-    youtubeAPIkey: 'AIzaSyBBIXCnoxx75mCcPud8afLCkjZJBkJWPis'
+    youtubeAPIkey: 'AIzaSyCXLq13eNoB8f08ylz9tkqKDnlteDhL4Vg',
+    favoritosYoutubeAPI: ''
 };

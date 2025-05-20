@@ -1,0 +1,25 @@
+<div class="text-center text-primary">
+  <h2>Videos Favoritos</h2>
+</div>
+<div class="row justify-content-center">
+  @for(item of video?.items; track item.id) {
+  <div class="card bg-light mb-3" style="width: 50%">
+    <div class="text-center mt-2" [innerHTML]="obtenerVideo(item)"></div>
+    <div class="card-body">
+      <h5 class="card-title">{{ item.snippet.title }}</h5>
+      <button class="btn btn-danger" (click)="elminarDeFavoritos(item)">
+        Eliminar de Favoritos
+      </button>
+      <p class="card-text">
+        {{ item.snippet.description }}
+      </p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">{{ item.snippet.channelTitle }}</li>
+      <li class="list-group-item">{{ item.statistics.viewCount | number }}</li>
+      <!--<li class="list-group-item">A third item</li>-->
+    </ul>
+  </div>
+  <hr />
+  }
+</div>
