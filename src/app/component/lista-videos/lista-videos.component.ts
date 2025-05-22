@@ -7,7 +7,7 @@ import { ItemVideo } from '../../model/itemvideo.model';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Search } from '../../model/search.model';
 import { FavoritosYoutubeService } from '../../service/favoritos-youtube.service';
-import { VideoFavoritoCreacion } from '../../model/videofavorito.model';
+import { VideoFavoritoCreacion, } from '../../model/videofavorito.model';
 
 @Component({
   selector: 'app-lista-videos',
@@ -26,7 +26,7 @@ export class ListaVideosComponent {
   btnPaginaSiguiente: boolean | null = null;
   private search: Search | null = null;
   palabraClave: string | null = null;
-  palabraClaveTemp: string | null = null;
+  //palabraClaveTemp: string | null = null;
 
   constructor() {
     this.obtenerVideos();
@@ -38,7 +38,7 @@ export class ListaVideosComponent {
         this.video = datos;
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
       },
       () => {
         if (this.video) {
@@ -66,7 +66,7 @@ export class ListaVideosComponent {
             this.video = datos;
           },
           (error) => {
-            alert('Ocurrio el siguiente error: ' + error);
+            console.error('Ocurrio el siguiente error: ' + error);
           },
           () => {
             if (this.video) {
@@ -88,7 +88,7 @@ export class ListaVideosComponent {
               this.search = datos;
             },
             (error) => {
-              alert('Ocurrio el siguiente error: ' + error);
+              console.error('Ocurrio el siguiente error: ' + error);
             },
             () => {
               if (this.search) {
@@ -119,7 +119,7 @@ export class ListaVideosComponent {
             this.video = datos;
           },
           (error) => {
-            alert('Ocurrio el siguiente error: ' + error);
+            console.error('Ocurrio el siguiente error: ' + error);
           },
           () => {
             if (this.video) {
@@ -140,7 +140,7 @@ export class ListaVideosComponent {
               this.search = datos;
             },
             (error) => {
-              alert('Ocurrio el siguiente error: ' + error);
+              console.error('Ocurrio el siguiente error: ' + error);
             },
             () => {
               if (this.search) {
@@ -167,19 +167,18 @@ export class ListaVideosComponent {
     }
   }
 
-  public buscarVideos() {
-    if (this.palabraClaveTemp) {
-      this.palabraClave = this.palabraClaveTemp;
+  public buscarVideos(palabraClave: string) {
+    if (palabraClave) {
+      this.palabraClave = palabraClave;
       this.youtubeService.buscarVideos(this.palabraClave, undefined).subscribe(
         (datos) => {
           this.search = datos;
         },
         (error) => {
-          alert('Ocurrio el siguiente error: ' + error);
+          console.error('Ocurrio el siguiente error: ' + error);
         },
         () => {
-          if (this.search) {
-            console.log(this.search);
+          if (this.search && this.search.items.length > 0) {
             this.obtenerVideosPorIds(this.search);
             this.numPagina = 1;
             this.btnPaginaAnterior = false;
@@ -202,21 +201,40 @@ export class ListaVideosComponent {
         this.video = datos;
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
       }
     );
   }
 
   public agregarEnFavoritos(item: ItemVideo) {
-    const videoFavorito: VideoFavoritoCreacion = {
-      idVideoYouTube: item.id
-    };
-    this.favoritosYoutubeService.agregarVideoFavorito(videoFavorito).subscribe(
-      () => {
-        alert('El video se agregó correctamente a los videos favoritos');
+    let existeVideoFavorito: boolean;
+    this.favoritosYoutubeService.validarExisteVideoFavorito(item.id).subscribe(
+      (dato) => {
+        existeVideoFavorito = dato;
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
+      },
+      () => {
+        if (!existeVideoFavorito) {
+          const videoFavoritoCreacion: VideoFavoritoCreacion = {
+            idVideoYouTube: item.id,
+          };
+          this.favoritosYoutubeService
+            .agregarVideoFavorito(videoFavoritoCreacion)
+            .subscribe(
+              () => {
+                alert(
+                  'El video se agregó correctamente a los videos favoritos'
+                );
+              },
+              (error) => {
+                console.error('Ocurrio el siguiente error: ' + error);
+              }
+            );
+        } else {
+          alert('El video seleccionado ya existe en Videos Favoritos');
+        }
       }
     );
   }

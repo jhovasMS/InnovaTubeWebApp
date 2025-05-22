@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="text-center text-primary">
+        <h2>Login</h2>
+    </div>
+    <div class="container-fluid mb-3" style="width: 30%">
+        <form method="post" role="search" #f="ngForm" (ngSubmit)="f.form.valid && loguear()">
+            <div>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-control me-2" placeholder="Introduce tu correo electrónico"
+                    required [(ngModel)]="email" #emailTemp="ngModel"/>
+                @if (emailTemp.invalid && emailTemp.touched) {
+                <div class="text-danger">
+                    Dato requerido 
+                </div>
+                }
+            </div>
+            <br/>
+            <div>
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control me-2" placeholder="Introduce tu contraseña"
+                    required [(ngModel)]="password" #passwordTemp="ngModel"/>
+                @if (passwordTemp.invalid && passwordTemp.touched) {
+                <div class="text-danger">
+                    Dato requerido 
+                </div>
+                }
+            </div>
+            <div class="text-danger">
+                @if (errores.length > 0){
+                    @for(item of errores; track item){
+                        {{item}}
+                    }
+                }
+            </div>
+            <br/> 
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-primary">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>

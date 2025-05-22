@@ -31,7 +31,7 @@ export class VideosFavoritosComponent {
         videosFavoritos = datos;
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
       },
       () => {
         this.obtenerVideosPorIds(videosFavoritos);
@@ -56,7 +56,7 @@ export class VideosFavoritosComponent {
         this.video = datos;
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
       }
     );
   }
@@ -68,7 +68,7 @@ export class VideosFavoritosComponent {
         this.obtenerVideosFavoritos();
       },
       (error) => {
-        alert('Ocurrio el siguiente error: ' + error);
+        console.error('Ocurrio el siguiente error: ' + error);
       }
     );
   }

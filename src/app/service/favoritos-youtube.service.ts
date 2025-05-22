@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { VideoFavorito, VideoFavoritoCreacion } from '../model/videofavorito.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -21,6 +21,11 @@ export class FavoritosYoutubeService {
   public obtenerVideosFavoritos(): Observable<VideoFavorito[]> {
     let videoFavoritoUrlBase = this.urlBaseFavoritosYouTube + '/api/videosfavoritos';
     return this.http.get<VideoFavorito[]>(videoFavoritoUrlBase);
+  }
+
+  public validarExisteVideoFavorito(idVideoYouTube: string): Observable<boolean> {
+    let videoFavoritoUrlBase = this.urlBaseFavoritosYouTube + '/api/videosfavoritos';
+    return this.http.get<boolean>(`${videoFavoritoUrlBase}/${idVideoYouTube}`)
   }
 
   public eliminarVideoFavorito(idVideoYouTube: string){
