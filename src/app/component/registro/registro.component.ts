@@ -24,7 +24,7 @@ export class RegistroComponent {
       password: this.password  
     };
     this.loginService.registrar(credenciales).subscribe(() =>{
-      this.router.navigate(['/'])
+      this.router.navigate(['/']);
     }, (error) => {
       const errores = extraerErroresIdentity(error);
       this.errores = errores;

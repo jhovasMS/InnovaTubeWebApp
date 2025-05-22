@@ -25,7 +25,7 @@ export class LoginComponent {
       password: this.password  
     };
     this.loginService.login(credenciales).subscribe(() =>{
-      this.router.navigate(['/'])
+      this.router.navigate(['/']);
     }, (error) => {
       const errores = extraerErroresIdentity(error);
       this.errores = errores;

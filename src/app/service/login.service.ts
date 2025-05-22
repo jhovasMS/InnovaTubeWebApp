@@ -5,7 +5,8 @@ import {
   CredencialesUsuarioDTO,
   RespuestaAutenticaciónDTO,
 } from '../model/login.model';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { EventEmitter } from 'stream';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class LoginService {
   private urlBase = environment.favoritosYoutubeAPI + '/api/usuarios';
   private readonly llaveToken = 'token';
   private readonly llaveExpiracion = 'token-expiracion';
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 
@@ -45,32 +47,41 @@ export class LoginService {
       );
   }
 
-  guardarToken(respuestaAutenticacionDTO: RespuestaAutenticaciónDTO) {
+  private guardarToken(respuestaAutenticacionDTO: RespuestaAutenticaciónDTO) {
     localStorage.setItem(this.llaveToken, respuestaAutenticacionDTO.token);
     localStorage.setItem(
       this.llaveExpiracion,
       respuestaAutenticacionDTO.expiracion.toString()
     );
+    this.loggedIn.next(true);
   }
 
-  estaLogueado(): boolean {
+  public estaLogueado(): Observable<boolean> {
+    this.loggedIn.next(this.validarToken());
+    return this.loggedIn.asObservable();
+  }
+
+  private validarToken(): boolean {
     let isLocalStorageAvailable = typeof localStorage !== 'undefined';
-    if(isLocalStorageAvailable){
+    if (isLocalStorageAvailable) {
       const token = localStorage.getItem(this.llaveToken);
-    if (!token) {
-      return false;
-    }
+      if (!token) {
+        console.log('No hay token');
+        return false;
+      }
 
-    const expiracion = localStorage.getItem(this.llaveExpiracion)!;
-    const expiracionFecha = new Date(expiracion);
+      const expiracion = localStorage.getItem(this.llaveExpiracion)!;
+      const expiracionFecha = new Date(expiracion);
 
-    if (expiracionFecha <= new Date()) {
-      this.logout();
-      return false;
-    }
-
-    return true;
-    }else{
+      if (expiracionFecha <= new Date()) {
+        console.log('token expiro');
+        this.logout();
+        return false;
+      }
+      console.log('Si hay token');
+      return true;
+    } else {
+      console.log('No existe nada en local store');
       return false;
     }
   }
@@ -78,5 +89,6 @@ export class LoginService {
   public logout() {
     localStorage.removeItem(this.llaveToken);
     localStorage.removeItem(this.llaveExpiracion);
+    this.loggedIn.next(false);
   }
 }

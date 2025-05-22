@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../service/login.service';
+import { map, take } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -14,12 +15,19 @@ export class MenuComponent {
   estaLogueado: boolean = false;
 
   ngOnInit(){
-    this.estaLogueado = this.loginService.estaLogueado();
+    this.loginService.estaLogueado().subscribe((estaLogueado:boolean)=>{
+      this.estaLogueado = estaLogueado;
+    },()=>{
+      if(!this.estaLogueado){
+        this.estaLogueado = false;
+      }  
+      this.estaLogueado = true;  
+    });
   }
 
   logout(){
     this.loginService.logout();
-    this.estaLogueado = false;
+    //this.estaLogueado = false;
     this.router.navigate(['/']);
   }
 }
